@@ -18,8 +18,7 @@ python manage.py runserver
 ## Run with Docker
 docker build -t linksafe .  
 docker run -p 80:80 \
-  -e DJANGO_SECRET_KEY="dev-key" \
-  -e DJANGO_DEBUG=True \
+  -e DJANGO_SECRET_KEY="dev-key"
   linksafe  
 
 ## Environment Variables
