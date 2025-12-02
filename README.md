@@ -24,8 +24,6 @@ docker run -p 80:80 \
 
 ## Environment Variables
 - `DJANGO_SECRET_KEY`
-- `DJANGO_DEBUG`
-- `DJANGO_ALLOWED_HOSTS`
 
 ## Project Structure
 linksafe/  
