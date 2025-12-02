@@ -27,7 +27,7 @@ docker run -p 80:80 \
 
 ## Project Structure
 linksafe/  
-├── app/                # models, forms, views, templates  
+├── home/                # models, forms, views, templates  
 ├── linksafe/           # settings, urls, wsgi  
 ├── Dockerfile  
 ├── requirements.txt  
