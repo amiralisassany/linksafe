@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+../.idea
+# Virtualenvs
+venv/
+env/
+.env/
+.venv/
+
+# Django stuff
+*.log
+db.sqlite3
+media/
+staticfiles/
+static_root/
+*.pot
+
+# VSCode / PyCharm / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+*.env
+.env.*
+.envrc
+
+# Docker
+*.pid

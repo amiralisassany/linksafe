@@ -1,0 +1,702 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Link Safe | Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #050816;
+            --bg-card: rgba(15, 23, 42, 0.9);
+            --accent: #6366f1;
+            --accent-soft: rgba(99, 102, 241, 0.2);
+            --accent-2: #22d3ee;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-subtle: rgba(148, 163, 184, 0.25);
+            --radius-xl: 1.5rem;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.65);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 50%, #000 100%);
+            color: var(--text-main);
+        }
+
+        body {
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated gradient background */
+        .bg-orbit {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.25), transparent 55%),
+                radial-gradient(circle at 90% 10%, rgba(129, 140, 248, 0.4), transparent 55%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.25), transparent 55%);
+            filter: blur(3px);
+            opacity: 0.85;
+            animation: orbit-move 16s linear infinite alternate;
+        }
+
+        @keyframes orbit-move {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+            50% {
+                transform: translate3d(-12px, 8px, 0) scale(1.03);
+            }
+            100% {
+                transform: translate3d(10px, -6px, 0) scale(1.02);
+            }
+        }
+
+        .bg-noise {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.23;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            mix-blend-mode: soft-light;
+        }
+
+        .shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .shell {
+                padding: 1.5rem 2rem 3.5rem;
+            }
+        }
+
+        /* Top nav */
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            backdrop-filter: blur(18px);
+            background: linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.9),
+                    rgba(15, 23, 42, 0.7)
+            );
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.65);
+            position: sticky;
+            top: 0.75rem;
+            z-index: 10;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .nav-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            background: radial-gradient(circle at 30% 0%, #22d3ee, #6366f1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #020617;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+        }
+
+        .nav-title-main {
+            font-size: 0.98rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .nav-title-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.25), transparent 50%);
+        }
+
+        .pill-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.2);
+        }
+
+        /* Main layout */
+        .hero {
+            margin-top: 2.7rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+            gap: 2.25rem;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: minmax(0, 1fr);
+                margin-top: 2.2rem;
+            }
+        }
+
+        /* Left side content */
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(129, 140, 248, 0.5);
+            background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.3), transparent 60%);
+            font-size: 0.75rem;
+            color: #c7d2fe;
+        }
+
+        .eyebrow-badge {
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            background: rgba(30, 64, 175, 0.7);
+            font-size: 0.7rem;
+            border: 1px solid rgba(129, 140, 248, 0.7);
+        }
+
+        .title {
+            margin-top: 1.4rem;
+            font-size: clamp(2.1rem, 4vw, 3rem);
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
+
+        .title span.gradient {
+            background: linear-gradient(120deg, #6366f1, #22d3ee, #a855f7);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            margin-top: 0.9rem;
+            font-size: 0.98rem;
+            max-width: 34rem;
+            color: var(--text-muted);
+        }
+
+        .subtitle strong {
+            color: #e5e7eb;
+            font-weight: 500;
+        }
+
+        .hero-meta {
+            margin-top: 1.4rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .meta-chip {
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.12), transparent 60%);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .meta-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.9);
+        }
+
+        /* CTA row */
+        .cta-row {
+            margin-top: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            position: relative;
+            border-radius: 999px;
+            border: none;
+            padding: 0.75rem 1.6rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: radial-gradient(circle at top left, #4f46e5, #22d3ee);
+            color: #f9fafb;
+            cursor: pointer;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow:
+                    0 14px 30px rgba(37, 99, 235, 0.65),
+                    0 0 0 1px rgba(191, 219, 254, 0.15);
+            transition: transform 150ms ease-out, box-shadow 150ms ease-out, filter 150ms ease-out;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px) scale(1.01);
+            filter: brightness(1.03);
+            box-shadow:
+                    0 18px 40px rgba(37, 99, 235, 0.9),
+                    0 0 0 1px rgba(191, 219, 254, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0) scale(0.99);
+            box-shadow:
+                    0 4px 16px rgba(15, 23, 42, 0.7),
+                    0 0 0 1px rgba(191, 219, 254, 0.2);
+        }
+
+        .btn-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(248, 250, 252, 0.35), transparent 55%);
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 180ms ease-out;
+        }
+
+        .btn-primary:hover .btn-glow {
+            opacity: 1;
+        }
+
+        .btn-icon {
+            width: 1.1rem;
+            height: 1.1rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.26);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .cta-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .cta-note span {
+            color: #a5b4fc;
+            font-weight: 500;
+        }
+
+        /* Right card */
+        .card-wrap {
+            perspective: 1200px;
+        }
+
+        .card {
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.18), transparent 65%),
+            linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
+            padding: 1.2rem 1.2rem 1.3rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            transform-style: preserve-3d;
+            transition:
+                    transform 160ms ease-out,
+                    box-shadow 180ms ease-out,
+                    border-color 180ms ease-out;
+        }
+
+        .card:hover {
+            border-color: rgba(129, 140, 248, 0.7);
+            box-shadow:
+                    0 20px 40px rgba(15, 23, 42, 0.9),
+                    0 0 35px rgba(129, 140, 248, 0.2);
+        }
+
+        .card-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.9rem;
+        }
+
+        .card-pill {
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(129, 140, 248, 0.6);
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .card-pill-dot {
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 999px;
+            background: #22d3ee;
+        }
+
+        .card-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .card-indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+        }
+
+        .card-main-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .card-main-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.6rem;
+            margin-top: 1.1rem;
+        }
+
+        .stat {
+            padding: 0.55rem 0.65rem;
+            border-radius: 0.9rem;
+            border: 1px solid rgba(51, 65, 85, 0.9);
+            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+            font-size: 0.78rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            margin-top: 0.1rem;
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        .stat-badge {
+            margin-top: 0.05rem;
+            font-size: 0.72rem;
+            color: #a5b4fc;
+        }
+
+        .card-footer {
+            margin-top: 0.9rem;
+            padding-top: 0.7rem;
+            border-top: 1px dashed rgba(75, 85, 99, 0.7);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.7rem;
+        }
+
+        .card-footer-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            max-width: 12rem;
+        }
+
+        .card-footer-tag {
+            padding: 0.34rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid rgba(55, 65, 81, 0.9);
+            font-size: 0.76rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow:
+                    0 0 0 0 rgba(34, 197, 94, 0.5);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        /* Mobile tweaks */
+        @media (max-width: 600px) {
+            .nav {
+                padding-inline: 0.8rem;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .card-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-orbit"></div>
+<div class="bg-noise"></div>
+
+<div class="shell">
+    <!-- NAVBAR -->
+    <header class="nav">
+        <div class="nav-left">
+            <div class="nav-logo">LS</div>
+            <div>
+                <div class="nav-title-main">Link Safe</div>
+                <div class="nav-title-sub">Craft clean, shareable URLs</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="pill">
+                <span class="pill-dot"></span>
+                <span>Ready to make your first link</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <main class="hero">
+        <!-- LEFT COLUMN -->
+        <section>
+            <div class="eyebrow">
+                <span class="eyebrow-badge">New</span>
+                <span>Deliver it shorter!</span>
+            </div>
+
+            <h1 class="title">
+                Your links, <span class="gradient">refined</span> —
+                before you even hit send.
+            </h1>
+
+            <p class="subtitle">
+                Start with a simple <strong>“Make a link”</strong> flow and we’ll
+                handle the rest: short IDs, optional expiry rules, and click tracking.
+            </p>
+
+            <div class="hero-meta">
+                <div class="meta-chip">
+                    <span class="meta-dot"></span>
+                    <span>No login required</span>
+                </div>
+                <div class="meta-chip">
+                    <span class="meta-dot"></span>
+                    <span>Time &amp; click limits supported</span>
+                </div>
+                <div class="meta-chip">
+                    <span class="meta-dot"></span>
+                    <span>Clean links from any long URL</span>
+                </div>
+            </div>
+
+            <div class="cta-row">
+                <!-- MAIN CTA BUTTON -->
+                <a href="{% url 'make_link' %}">
+                    <button type="button" class="btn-primary" id="make-link-btn">
+                        <span class="btn-glow"></span>
+                        <span>Make a link</span>
+                        <span class="btn-icon">↗</span>
+                    </button>
+                </a>
+
+                <p class="cta-note">
+                    <span>1 click</span> to start — you’ll choose all the
+                    link details on the next screen.
+                </p>
+            </div>
+        </section>
+
+        <!-- RIGHT COLUMN: INTERACTIVE CARD -->
+        <section class="card-wrap">
+            <article class="card" id="preview-card">
+                <div class="card-badge-row">
+                    <div class="card-pill">
+                        <span class="card-pill-dot"></span>
+                        <span>Example link summary</span>
+                    </div>
+                    <div class="card-indicator">
+                        <span class="card-indicator-dot"></span>
+                        <span>Matches how your links behave</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-main-title">
+                        Example: short link + rules
+                    </div>
+                    <div class="card-main-sub">
+                        This is a mock preview based on your actual model: short ID, original URL, expiry &amp; clicks.
+                        Your real data appears after creating a link.
+                    </div>
+                </div>
+
+                <div class="card-grid">
+                    <div class="stat">
+                        <div class="stat-label">Short link</div>
+                        <div class="stat-value">example.com/abc123</div>
+                        <div class="stat-badge">built from short_id</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Destination URL</div>
+                        <div class="stat-value">https://very-long-url.com/…</div>
+                        <div class="stat-badge">stored in url</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Title</div>
+                        <div class="stat-value">Launch page</div>
+                        <div class="stat-badge">optional label</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Time limit</div>
+                        <div class="stat-value">7 days</div>
+                        <div class="stat-badge">Expiration date</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Click limit</div>
+                        <div class="stat-value">100 clicks</div>
+                        <div class="stat-badge">Max possible clicks before expiry</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">Clicks used</div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-badge">Times it clicked</div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <p class="card-footer-text">
+                        Create a link to see your own short_id, destination URL,
+                        and live expiry rules reflected on the detail page.
+                    </p>
+                    <div class="card-footer-tag">
+                        <span class="pulse-dot"></span>
+                        <span>Next step: link form →</span>
+                    </div>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+
+<script>
+    // Button hover glow tracking
+    (function () {
+        const btn = document.getElementById("make-link-btn");
+        if (!btn) return;
+        const glow = btn.querySelector(".btn-glow");
+
+        btn.addEventListener("pointermove", (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            glow.style.setProperty("--mx", x + "%");
+            glow.style.setProperty("--my", y + "%");
+        });
+    })();
+
+    // Subtle 3D tilt for the preview card
+    (function () {
+        const card = document.getElementById("preview-card");
+        if (!card) return;
+
+        const maxTilt = 9;
+
+        function handleMove(e) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const percentX = (x / rect.width) - 0.5;
+            const percentY = (y / rect.height) - 0.5;
+
+            const tiltX = (percentY * -maxTilt).toFixed(2);
+            const tiltY = (percentX * maxTilt).toFixed(2);
+
+            card.style.transform =
+                "rotateX(" + tiltX + "deg) rotateY(" + tiltY + "deg) translateZ(0)";
+        }
+
+        function resetTilt() {
+            card.style.transform = "rotateX(0deg) rotateY(0deg)";
+        }
+
+        card.addEventListener("pointermove", handleMove);
+        card.addEventListener("pointerleave", resetTilt);
+    })();
+</script>
+</body>
+</html>

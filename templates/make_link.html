@@ -1,0 +1,927 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Link Safe | Make a Link</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #050816;
+            --bg-card: rgba(15, 23, 42, 0.9);
+            --accent: #6366f1;
+            --accent-soft: rgba(99, 102, 241, 0.2);
+            --accent-2: #22d3ee;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-subtle: rgba(148, 163, 184, 0.25);
+            --radius-xl: 1.5rem;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.65);
+            --error: #f97373;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 50%, #000 100%);
+            color: var(--text-main);
+        }
+
+        body {
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-orbit {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.25), transparent 55%),
+                radial-gradient(circle at 90% 10%, rgba(129, 140, 248, 0.4), transparent 55%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.25), transparent 55%);
+            filter: blur(3px);
+            opacity: 0.85;
+            animation: orbit-move 16s linear infinite alternate;
+        }
+
+        @keyframes orbit-move {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(-12px, 8px, 0) scale(1.03); }
+            100% { transform: translate3d(10px, -6px, 0) scale(1.02); }
+        }
+
+        .bg-noise {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.23;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            mix-blend-mode: soft-light;
+        }
+
+        .shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 1.25rem 1.5rem 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .shell {
+                padding: 1.5rem 2rem 3.5rem;
+            }
+        }
+
+        /* NAVBAR (matches index) */
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            backdrop-filter: blur(18px);
+            background: linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.9),
+                    rgba(15, 23, 42, 0.7)
+            );
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.65);
+            position: sticky;
+            top: 0.75rem;
+            z-index: 10;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .nav-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+            background: radial-gradient(circle at 30% 0%, #22d3ee, #6366f1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #020617;
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+        }
+
+        .nav-title-main {
+            font-size: 0.98rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        .nav-title-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .pill {
+            border-radius: 999px;
+            padding: 0.28rem 0.75rem;
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.25), transparent 50%);
+        }
+
+        .pill-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.2);
+        }
+
+        /* PAGE LAYOUT */
+        .hero {
+            margin-top: 2.7rem;
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+            gap: 2.25rem;
+            align-items: flex-start;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: minmax(0, 1fr);
+                margin-top: 2.2rem;
+            }
+        }
+
+        .page-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(129, 140, 248, 0.5);
+            background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.3), transparent 60%);
+            font-size: 0.75rem;
+            color: #c7d2fe;
+        }
+
+        .page-eyebrow-badge {
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            background: rgba(30, 64, 175, 0.7);
+            font-size: 0.7rem;
+            border: 1px solid rgba(129, 140, 248, 0.7);
+        }
+
+        .page-title {
+            margin-top: 1.3rem;
+            font-size: clamp(2rem, 3.5vw, 2.6rem);
+            line-height: 1.1;
+            letter-spacing: -0.04em;
+        }
+
+        .page-title span.gradient {
+            background: linear-gradient(120deg, #6366f1, #22d3ee, #a855f7);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .page-subtitle {
+            margin-top: 0.9rem;
+            font-size: 0.95rem;
+            max-width: 32rem;
+            color: var(--text-muted);
+        }
+
+        .page-subtitle strong {
+            color: #e5e7eb;
+            font-weight: 500;
+        }
+
+        .meta-row {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .meta-chip {
+            padding: 0.3rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.12), transparent 60%);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .meta-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, 0.9);
+        }
+
+        /* FORM CARD */
+        .form-card {
+            margin-top: 1.8rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.18), transparent 65%),
+            linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
+            padding: 1.5rem 1.4rem 1.7rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        form {
+            display: grid;
+            gap: 1.3rem;
+        }
+
+        .field {
+            position: relative;
+        }
+
+        .field input {
+            width: 100%;
+            padding: 1rem 1.1rem;
+            border-radius: 0.9rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 160ms ease, background 160ms ease, box-shadow 160ms ease, transform 150ms ease;
+        }
+
+        .field input:focus {
+            border-color: var(--accent);
+            background: rgba(30, 41, 59, 0.95);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .field label {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: all 160ms ease;
+            background: transparent;
+        }
+
+        /* floating labels */
+        .field input:focus + label,
+        .field input:not(:placeholder-shown) + label {
+            top: -0.6rem;
+            left: 0.8rem;
+            font-size: 0.75rem;
+            padding: 0 0.35rem;
+            background: #020617;
+            color: var(--accent-2);
+        }
+
+        .help-text {
+            margin-top: 0.3rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .error-msg {
+            margin-top: 0.3rem;
+            font-size: 0.78rem;
+            color: var(--error);
+        }
+
+        .btn-row {
+            margin-top: 0.6rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .btn-primary {
+            position: relative;
+            border-radius: 999px;
+            border: none;
+            padding: 0.8rem 1.7rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: radial-gradient(circle at top left, #4f46e5, #22d3ee);
+            color: #f9fafb;
+            cursor: pointer;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow:
+                    0 14px 30px rgba(37, 99, 235, 0.65),
+                    0 0 0 1px rgba(191, 219, 254, 0.15);
+            transition: transform 150ms ease-out, box-shadow 150ms ease-out, filter 150ms ease-out;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px) scale(1.01);
+            filter: brightness(1.03);
+            box-shadow:
+                    0 18px 40px rgba(37, 99, 235, 0.9),
+                    0 0 0 1px rgba(191, 219, 254, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0) scale(0.99);
+            box-shadow:
+                    0 4px 16px rgba(15, 23, 42, 0.7),
+                    0 0 0 1px rgba(191, 219, 254, 0.2);
+        }
+
+        .btn-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(248, 250, 252, 0.35), transparent 55%);
+            mix-blend-mode: soft-light;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 180ms ease-out;
+        }
+
+        .btn-primary:hover .btn-glow {
+            opacity: 1;
+        }
+
+        .btn-icon {
+            width: 1.1rem;
+            height: 1.1rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.26);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .btn-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .btn-note span {
+            color: #a5b4fc;
+            font-weight: 500;
+        }
+
+        .back-link {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            color: var(--accent-2);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* RIGHT SIDE: LIVE SUMMARY CARD */
+        .card-wrap {
+            perspective: 1200px;
+        }
+
+        .card {
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-subtle);
+            background: radial-gradient(circle at top left, rgba(148, 163, 184, 0.18), transparent 65%),
+            linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.88));
+            padding: 1.3rem 1.2rem 1.4rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            transform-style: preserve-3d;
+            transition:
+                    transform 160ms ease-out,
+                    box-shadow 180ms ease-out,
+                    border-color 180ms ease-out;
+        }
+
+        .card:hover {
+            border-color: rgba(129, 140, 248, 0.7);
+            box-shadow:
+                    0 20px 40px rgba(15, 23, 42, 0.9),
+                    0 0 35px rgba(129, 140, 248, 0.2);
+        }
+
+        .card-badge-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.9rem;
+        }
+
+        .card-pill {
+            padding: 0.2rem 0.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(129, 140, 248, 0.6);
+            font-size: 0.75rem;
+            color: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .card-pill-dot {
+            width: 0.4rem;
+            height: 0.4rem;
+            border-radius: 999px;
+            background: #22d3ee;
+        }
+
+        .card-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .card-indicator-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: #22c55e;
+        }
+
+        .card-main-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .card-main-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.6rem;
+            margin-top: 1.1rem;
+        }
+
+        .stat {
+            padding: 0.55rem 0.65rem;
+            border-radius: 0.9rem;
+            border: 1px solid rgba(51, 65, 85, 0.9);
+            background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+            font-size: 0.78rem;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+        }
+
+        .stat-value {
+            margin-top: 0.1rem;
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        .stat-badge {
+            margin-top: 0.05rem;
+            font-size: 0.72rem;
+            color: #a5b4fc;
+        }
+
+        .card-footer {
+            margin-top: 0.9rem;
+            padding-top: 0.7rem;
+            border-top: 1px dashed rgba(75, 85, 99, 0.7);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22c55e;
+            box-shadow:
+                    0 0 0 0 rgba(34, 197, 94, 0.5);
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+            margin-right: 0.35rem;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .nav {
+                padding-inline: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-orbit"></div>
+<div class="bg-noise"></div>
+
+<div class="shell">
+    <!-- NAVBAR -->
+    <header class="nav">
+        <div class="nav-left">
+            <div class="nav-logo">LS</div>
+            <div>
+                <div class="nav-title-main">Link Safe</div>
+                <div class="nav-title-sub">Configure your link rules</div>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="pill">
+                <span class="pill-dot"></span>
+                <span>Step 2 · Make a link</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="hero">
+        <!-- LEFT: FORM -->
+        <section>
+            <div class="page-eyebrow">
+                <span class="page-eyebrow-badge">Configure</span>
+                <span>Title, destination & expiration rules</span>
+            </div>
+
+            <h1 class="page-title">
+                Make a <span class="gradient">new link</span>.
+            </h1>
+
+            <p class="page-subtitle">
+                Choose a human-readable <strong>title</strong>, the target
+                <strong>URL</strong>, and optionally how and when the link
+                should <strong>expire</strong>.
+            </p>
+
+            <div class="meta-row">
+                <div class="meta-chip">
+                    <span class="meta-dot"></span>
+                    <span>Time-based expiry (days)</span>
+                </div>
+                <div class="meta-chip">
+                    <span class="meta-dot"></span>
+                    <span>Click-based expiry</span>
+                </div>
+                <div class="meta-chip">
+                    <span class="meta-dot"></span>
+                    <span>Leave both empty → never expires</span>
+                </div>
+            </div>
+
+            <section class="form-card">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <!-- TITLE -->
+                    <div class="field">
+                        <input
+                            type="text"
+                            name="{{ form.title.name }}"
+                            placeholder=" "
+                            value="{{ form.title.value|default:'' }}"
+                        />
+                        <label>Title (optional)</label>
+                        {% if form.title.errors %}
+                            <div class="error-msg">{{ form.title.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- URL -->
+                    <div class="field">
+                        <input
+                            type="url"
+                            name="{{ form.url.name }}"
+                            placeholder=" "
+                            value="{{ form.url.value|default:'' }}"
+                            required
+                        />
+                        <label>Destination URL</label>
+                        {% if form.url.help_text %}
+                            <div class="help-text">{{ form.url.help_text }}</div>
+                        {% endif %}
+                        {% if form.url.errors %}
+                            <div class="error-msg">{{ form.url.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- EXPIRE DAYS -->
+                    <div class="field">
+                        <input
+                            id="field-expire-days"
+                            type="number"
+                            name="{{ form.expire_days.name }}"
+                            placeholder=" "
+                            value="{{ form.expire_days.value|default:'' }}"
+                            min="1"
+                        />
+                        <label>Expire after days (optional)</label>
+                        {% if form.expire_days.help_text %}
+                            <div class="help-text">{{ form.expire_days.help_text }}</div>
+                        {% else %}
+                            <div class="help-text">Leave empty to ignore time-based expiry.</div>
+                        {% endif %}
+                        {% if form.expire_days.errors %}
+                            <div class="error-msg">{{ form.expire_days.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- EXPIRE CLICKS -->
+                    <div class="field">
+                        <input
+                            id="field-expire-clicks"
+                            type="number"
+                            name="{{ form.expire_clicks.name }}"
+                            placeholder=" "
+                            value="{{ form.expire_clicks.value|default:'' }}"
+                            min="1"
+                        />
+                        <label>Expire after clicks (optional)</label>
+                        {% if form.expire_clicks.help_text %}
+                            <div class="help-text">{{ form.expire_clicks.help_text }}</div>
+                        {% else %}
+                            <div class="help-text">Leave empty to ignore click-based expiry.</div>
+                        {% endif %}
+                        {% if form.expire_clicks.errors %}
+                            <div class="error-msg">{{ form.expire_clicks.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="submit" class="btn-primary" id="submit-btn">
+                            <span class="btn-glow"></span>
+                            <span>Create link</span>
+                            <span class="btn-icon">↳</span>
+                        </button>
+
+                        <p class="btn-note">
+                            <span>Tip:</span> leaving both expiry fields empty will create a link that never automatically expires.
+                        </p>
+                    </div>
+                </form>
+
+                <a href="{% url 'index' %}" class="back-link">
+                    <span>←</span>
+                    <span>Back to home</span>
+                </a>
+            </section>
+        </section>
+
+        <!-- RIGHT: LIVE SUMMARY CARD -->
+        <section class="card-wrap">
+            <article class="card" id="summary-card">
+                <div class="card-badge-row">
+                    <div class="card-pill">
+                        <span class="card-pill-dot"></span>
+                        <span>Expiry summary</span>
+                    </div>
+                    <div class="card-indicator">
+                        <span class="card-indicator-dot"></span>
+                        <span>Updates as you type</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-main-title" id="summary-title">
+                        Untitled link
+                    </div>
+                    <div class="card-main-sub" id="summary-url">
+                        Paste a destination URL to see it here.
+                    </div>
+                </div>
+
+                <div class="card-grid">
+                    <div class="stat">
+                        <div class="stat-label">Time expiry</div>
+                        <div class="stat-value" id="summary-days">
+                            No limit
+                        </div>
+                        <div class="stat-badge" id="summary-days-badge">
+                            Leave empty → no time limit
+                        </div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Click expiry</div>
+                        <div class="stat-value" id="summary-clicks">
+                            No limit
+                        </div>
+                        <div class="stat-badge" id="summary-clicks-badge">
+                            Leave empty → unlimited clicks
+                        </div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Status</div>
+                        <div class="stat-value" id="summary-status">
+                            Active
+                        </div>
+                        <div class="stat-badge">
+                            Applies once link is created
+                        </div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Mode</div>
+                        <div class="stat-value" id="summary-mode">
+                            Never expires
+                        </div>
+                        <div class="stat-badge">
+                            Based on your selections
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <span class="pulse-dot"></span>
+                    <span id="summary-footer-text">
+                        This link will remain active indefinitely until we wipe out the old or never clicked ones from our data base.
+                    </span>
+                </div>
+            </article>
+        </section>
+    </main>
+</div>
+
+<script>
+    // Button hover glow tracking
+    (function () {
+        const btn = document.getElementById("submit-btn");
+        if (!btn) return;
+        const glow = btn.querySelector(".btn-glow");
+
+        btn.addEventListener("pointermove", (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            glow.style.setProperty("--mx", x + "%");
+            glow.style.setProperty("--my", y + "%");
+        });
+    })();
+
+    // Subtle 3D tilt for the summary card
+    (function () {
+        const card = document.getElementById("summary-card");
+        if (!card) return;
+
+        const maxTilt = 9;
+
+        function handleMove(e) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const percentX = (x / rect.width) - 0.5;
+            const percentY = (y / rect.height) - 0.5;
+
+            const tiltX = (percentY * -maxTilt).toFixed(2);
+            const tiltY = (percentX * maxTilt).toFixed(2);
+
+            card.style.transform =
+                "rotateX(" + tiltX + "deg) rotateY(" + tiltY + "deg) translateZ(0)";
+        }
+
+        function resetTilt() {
+            card.style.transform = "rotateX(0deg) rotateY(0deg)";
+        }
+
+        card.addEventListener("pointermove", handleMove);
+        card.addEventListener("pointerleave", resetTilt);
+    })();
+
+    // Live summary based on form values
+    (function () {
+        const titleInput = document.querySelector('input[name="{{ form.title.name }}"]');
+        const urlInput = document.querySelector('input[name="{{ form.url.name }}"]');
+        const daysInput = document.getElementById("field-expire-days");
+        const clicksInput = document.getElementById("field-expire-clicks");
+
+        const titleEl = document.getElementById("summary-title");
+        const urlEl = document.getElementById("summary-url");
+        const daysEl = document.getElementById("summary-days");
+        const daysBadgeEl = document.getElementById("summary-days-badge");
+        const clicksEl = document.getElementById("summary-clicks");
+        const clicksBadgeEl = document.getElementById("summary-clicks-badge");
+        const modeEl = document.getElementById("summary-mode");
+        const footerEl = document.getElementById("summary-footer-text");
+
+        function cleanUrl(str) {
+            try {
+                const url = new URL(str);
+                return url.origin + url.pathname;
+            } catch (e) {
+                return str;
+            }
+        }
+
+        function updateSummary() {
+            const titleVal = (titleInput && titleInput.value.trim()) || "";
+            const urlVal = (urlInput && urlInput.value.trim()) || "";
+            const daysVal = (daysInput && daysInput.value.trim()) || "";
+            const clicksVal = (clicksInput && clicksInput.value.trim()) || "";
+
+            // Title
+            titleEl.textContent = titleVal || "Untitled link";
+
+            // URL
+            if (!urlVal) {
+                urlEl.textContent = "Paste a destination URL to see it here.";
+            } else {
+                urlEl.textContent = cleanUrl(urlVal);
+            }
+
+            // Days
+            if (daysVal) {
+                daysEl.textContent = daysVal + " day" + (daysVal === "1" ? "" : "s");
+                daysBadgeEl.textContent = "Link auto-disables after this time";
+            } else {
+                daysEl.textContent = "No limit";
+                daysBadgeEl.textContent = "Leave empty → no time limit";
+            }
+
+            // Clicks
+            if (clicksVal) {
+                clicksEl.textContent = clicksVal + " click" + (clicksVal === "1" ? "" : "s");
+                clicksBadgeEl.textContent = "Link auto-disables after this many visits";
+            } else {
+                clicksEl.textContent = "No limit";
+                clicksBadgeEl.textContent = "Leave empty → unlimited clicks";
+            }
+
+            // Mode + footer copy
+            const hasDays = !!daysVal;
+            const hasClicks = !!clicksVal;
+
+            if (!hasDays && !hasClicks) {
+                modeEl.textContent = "Never expires";
+                footerEl.textContent = "This link will remain active indefinitely until you change its settings or delete it.";
+            } else if (hasDays && hasClicks) {
+                modeEl.textContent = "Time + click limited";
+                footerEl.textContent = "Whichever comes first — time or click limit — will deactivate this link.";
+            } else if (hasDays) {
+                modeEl.textContent = "Time-limited";
+                footerEl.textContent = "Once the configured number of days passes, this link will stop resolving.";
+            } else if (hasClicks) {
+                modeEl.textContent = "Click-limited";
+                footerEl.textContent = "After the click limit is reached, this link will stop resolving.";
+            }
+        }
+
+        [titleInput, urlInput, daysInput, clicksInput].forEach(function (el) {
+            if (!el) return;
+            el.addEventListener("input", updateSummary);
+        });
+
+        updateSummary();
+    })();
+</script>
+</body>
+</html>

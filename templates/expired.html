@@ -1,0 +1,179 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Link Expired | LinkSafe</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #050816;
+            --bg-card: rgba(15, 23, 42, 0.8);
+            --accent: #6366f1;
+            --accent-2: #22d3ee;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-subtle: rgba(148, 163, 184, 0.25);
+            --radius-xl: 1.5rem;
+            --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.65);
+            --error: #f87171;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", sans-serif;
+            background: radial-gradient(circle at top, #1f2937 0, #020617 50%, #000 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+        }
+
+        .bg-orbit {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.3), transparent 55%),
+                radial-gradient(circle at 90% 10%, rgba(129, 140, 248, 0.4), transparent 55%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.3), transparent 55%);
+            filter: blur(4px);
+            opacity: 0.75;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 560px;
+            padding: 2rem 1.7rem;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.85));
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 1.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .error-icon {
+            font-size: 3.2rem;
+            color: var(--error);
+            margin-bottom: 1rem;
+        }
+
+        .subtext {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.6rem;
+            line-height: 1.45;
+        }
+
+        .info-block {
+            margin: 1.2rem auto;
+            padding: 1rem;
+            border-radius: 1rem;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            font-size: 0.9rem;
+            color: var(--text-main);
+            text-align: left;
+            max-width: 480px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--accent-2);
+        }
+
+        .btn-row {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn, .btn-secondary {
+            padding: 0.8rem 1.6rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.92rem;
+            transition: 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .btn {
+            background: linear-gradient(120deg, var(--accent), var(--accent-2));
+            color: #fff;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(15, 23, 42, 0.8);
+            color: var(--text-main);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(30, 41, 59, 0.9);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+<div class="bg-orbit"></div>
+
+<div class="card">
+    <div class="error-icon">⛔</div>
+
+    <div class="card-title">This link has expired</div>
+
+    <p class="subtext">
+        The link you tried to access is no longer active.<br>
+        It may have expired due to maximum clicks or the expiry date.
+    </p>
+
+    <div class="info-block">
+        <div><span class="info-label">Title:</span> {{ link.title|default:"(no title)" }}</div>
+
+        {% if link.expire_at %}
+            <div><span class="info-label">Expired at:</span> {{ link.expire_at }}</div>
+        {% else %}
+            <div><span class="info-label">Expiry:</span> No time limit</div>
+        {% endif %}
+
+        {% if link.max_clicks %}
+            <div><span class="info-label">Max clicks:</span> {{ link.max_clicks }}</div>
+            <div><span class="info-label">Clicks used:</span> {{ link.clicks }}</div>
+        {% else %}
+            <div><span class="info-label">Click limit:</span> Unlimited</div>
+        {% endif %}
+    </div>
+
+    <div class="btn-row">
+        <a href="{% url 'index' %}" class="btn-secondary">← Back to Home</a>
+        <a href="{% url 'make_link' %}" class="btn">Create New Link</a>
+    </div>
+</div>
+
+</body>
+</html>
